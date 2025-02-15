@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh Sửa Món Ăn</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include Header -->
+<th:block th:replace="Admin/Layout/header"></th:block>
+
+<!-- Include Navbar -->
+<th:block th:replace="Admin/Layout/sidebar"></th:block>
+
+<div class="mt-5 content">
+    <h2>Chỉnh Sửa Món Ăn</h2>
+
+    <form th:action="@{/thuc-don/edit/{id}(id=${menu.id})}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" th:value="${menu.id}" />
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên món ăn</label>
+            <input type="text" id="name" name="name" class="form-control" th:value="${menu.name}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Mô tả</label>
+            <textarea id="description" name="description" class="form-control" th:text="${menu.description}"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Giá</label>
+            <input type="number" id="price" name="price" class="form-control" th:value="${menu.price}" step="0.01" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="categoryId" class="form-label">Danh mục</label>
+            <select id="categoryId" name="categoryId.id" class="form-control">
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}"
+                        th:selected="${menu.categoryId != null and menu.categoryId.id == category.id}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="imageFile" class="form-label">Ảnh món ăn</label>
+            <input type="file" id="imageFile" name="imageFile" class="form-control">
+                <img th:src="${menu.imageUrl}" width="150" class="mt-2" alt="Ảnh món ăn">
+        </div>
+
+        <button type="submit" class="btn btn-success">Lưu</button>
+        <a href="/admin/thuc-don/list" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+
+</body>
+</html>
