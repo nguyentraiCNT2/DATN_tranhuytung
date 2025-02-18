@@ -24,7 +24,7 @@ public class RoleInterceptor implements HandlerInterceptor {
             return false;
         }
         if (requestURI.startsWith("/user") && (role == null || !(role.equals("USER") || role.equals("ADMIN") || role.equals("SUPER_ADMIN")))) {
-            response.sendRedirect("/403");
+            response.sendRedirect("/dangnhap");
             return false;
         }
 // Nếu không tìm thấy request phù hợp → chuyển hướng đến trang 404

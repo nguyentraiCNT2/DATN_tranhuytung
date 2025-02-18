@@ -18,6 +18,8 @@ import java.util.List;
  */
 @Repository
 public interface MenuRepository extends JpaRepository<MenuEntity, Long> {
+    @Query("select m from MenuEntity m WHERE m.deleteAt is null")
+    List<MenuEntity> findAllByDeleteAtIsNull();
 
     /**
      * Truy vấn danh sách món ăn theo ID danh mục có phân trang.

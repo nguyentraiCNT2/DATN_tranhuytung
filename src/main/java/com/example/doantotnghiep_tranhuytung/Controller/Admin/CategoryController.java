@@ -1,4 +1,4 @@
-package com.example.doantotnghiep_tranhuytung.Controller;
+package com.example.doantotnghiep_tranhuytung.Controller.Admin;
 
 import com.example.doantotnghiep_tranhuytung.Entity.CategoryEntity;
 import com.example.doantotnghiep_tranhuytung.Service.CategoryService;

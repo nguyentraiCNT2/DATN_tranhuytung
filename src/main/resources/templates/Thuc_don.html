@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhà Hàng Hàn Quốc</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Các style cũ giữ nguyên */
+  .menu{
+    margin-top: 5%;
+  }
+    /* Thêm style mới */
+    .menu-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .category-list {
+      width: 20%;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-list h3 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .category-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .category-list ul li {
+      margin-bottom: 10px;
+    }
+
+    .category-list ul li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .category-list ul li a:hover {
+      color: #BE1E2D;
+    }
+
+    .menu-items {
+      width: 80%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .pagination a {
+      margin: 0 5px;
+      padding: 5px 10px;
+      text-decoration: none;
+      color: #BE1E2D;
+      border: 1px solid #BE1E2D;
+      border-radius: 5px;
+    }
+
+    .pagination a.active {
+      background-color: #BE1E2D;
+      color: white;
+    }
+    .table-responsive{
+      display: flex;
+      padding: 10px;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .btn{
+      height: 40px;
+    }
+    .pagination{
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .buy-menu-button {
+      display: flex;
+      gap: 1rem;
+      text-decoration: none;
+      align-items: center;
+      color: #BE1E2D;
+      background-color: #fff;
+      border: 1px solid #BE1E2D;
+      padding: 4px 10px;
+      border-radius: 5px;
+      transition: all 0.3s;
+      margin-left: 25%;
+    }
+
+    .buy-menu-button:hover {
+      background: #BE1E2D;
+      color: #ffffff;
+    }
+    .menu-item {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 20%;
+    }
+
+    .menu-item img {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+
+    .menu-item .name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .menu-item .price {
+      color: #BE1E2D;
+      font-weight: bold;
+    }
+    .order-button{
+      padding: 10px;
+    }
+    .order-button {
+      width: 100%;
+      padding: 10px;
+
+    }
+  </style>
+</head>
+<body>
+<!-- Include Header -->
+<th:block th:replace="Layout/Header"></th:block>
+
+<!-- Thực đơn nổi bật -->
+<section class="menu">
+  <div class="menu-container">
+    <!-- Danh sách thể loại -->
+    <div class="category-list">
+      <h3>Thể Loại</h3>
+      <ul>
+        <li><a href="/thuc-don">Tất Cả</a></li>
+        <li th:each="category : ${categories}">
+          <a th:href="@{/thuc-don(categoryId=${category.id})}" th:text="${category.name}"></a>
+        </li>
+      </ul>
+    </div>
+    <!-- Danh sách thực đơn -->
+
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+      <div class="menu-items">
+
+        <div class="menu-item" th:each="menu : ${menus}">
+          <img th:src="${menu.imageUrl}" alt="Bibimbap">
+          <div class="name" th:text="${menu.name}"></div>
+          <div class="price" th:text="${#numbers.formatDecimal(menu.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></div>
+          <div class="order-button">
+            <form th:action="@{/user/dat-mon/order/{id}(id=${menu.id})}" method="post">
+              <button type="submit" class="buy-menu-button">
+                <i class="fa-solid fa-cart-shopping"></i> Đặt món
+              </button>
+            </form>
+
+          </div>
+        </div>
+    </div>
+
+  </div>
+
+  <!-- Phân trang -->
+  <nav>
+    <ul class="pagination">
+      <th:block th:if="${totalPages > 1}">
+        <li class="page-item">
+          <a class="page-link" th:href="@{/admin/category/list(page=${currentPage > 0 ? currentPage - 1 : 0})}">Trang trước</a>
+        </li>
+      </th:block>
+
+      <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item" th:classappend="${i == currentPage} ? 'active' : ''">
+        <a class="page-link" th:href="@{/admin/category/list(page=${i}, name=${param.name})}" th:text="${i + 1}"></a>
+      </li>
+
+      <th:block th:if="${currentPage + 1 < totalPages}">
+        <li class="page-item">
+          <a class="page-link" th:href="@{/admin/category/list(page=${currentPage + 1})}">Trang sau</a>
+        </li>
+      </th:block>
+    </ul>
+  </nav>
+</section>
+<!-- Include Header -->
+<th:block th:replace="Layout/Footer"></th:block>
+<!-- Các phần khác giữ nguyên -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

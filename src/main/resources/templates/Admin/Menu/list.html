@@ -43,8 +43,8 @@
 
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <form method="get" action="/thuc-don/list">
-        <a href="/thuc-don/add" class="btn btn-success">Thêm món ăn</a>
+    <form method="get" action="/admin/thuc-don/list">
+        <a href="/admin/thuc-don/add" class="btn btn-success">Thêm món ăn</a>
         <div class="table-responsive">
             <div class="mb-3">
                 <input type="text" name="name" class="form-control" placeholder="Tìm kiếm món ăn" th:value="${param.name}" />
@@ -62,17 +62,13 @@
                 <input type="date" name="endDate" class="form-control" placeholder="Ngày kết thúc" th:value="${paramEndDate}" />
             </div>
 
-            <select name="categoryId" class="form-control" >
-                <option value="">--Chọn thể loại--</option>
-                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-            </select>
             <div class="mb-3">
                 <select name="categoryId" class="form-control">
                     <option value="">-- Chọn thể loại --</option>
                     <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${param.categoryId == category.id}"></option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <button type="submit" class="btn btn-danger"><i class="fa-solid fa-filter"></i></button>
         </div>
     </form>
 

@@ -8,23 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #556B2F, #333333);
+            background: url("https://20sfvn.com/wp-content/uploads/2022/09/thiet-ke-nha-hang-han.jpeg") no-repeat center center fixed;
+            background-size: cover;
             height: 100vh;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Noto Sans KR', sans-serif;
         }
+
         .container {
             width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 4rem;
             max-width: 1200px;
             padding: 20px;
+            display: flex;
+            justify-content: center; /* Căn giữa theo chiều ngang */
+            align-items: center; /* Căn giữa theo chiều dọc */
         }
+
         .login-container {
-            width: 40%;
+            width: 100%;
+            max-width: 400px; /* Giới hạn chiều rộng của form */
             padding: 40px;
             background: white;
             border-radius: 20px;
@@ -32,27 +37,29 @@
             display: flex;
             flex-direction: column;
         }
+
         .login-form {
-            margin-top: 10%;
+            width: 100%; /* Đảm bảo form chiếm toàn bộ chiều rộng của container */
         }
+
         .login-image {
-            flex: 1;
+            display: none; /* Ẩn phần hình ảnh nếu không cần thiết */
         }
-        .login-image img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
+
         .form-control {
             border-radius: 10px;
             border: 1px solid #ddd;
             padding: 10px;
             font-size: 14px;
+            width: 100%; /* Đảm bảo input chiếm toàn bộ chiều rộng */
+            margin-bottom: 15px; /* Khoảng cách giữa các input */
         }
+
         .form-control:focus {
             border-color: #667eea;
             box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
         }
+
         .btn-primary {
             border-radius: 10px;
             background-color: #667eea;
@@ -60,10 +67,14 @@
             padding: 10px;
             font-size: 16px;
             font-weight: 500;
+            width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+            margin-top: 10px; /* Khoảng cách phía trên nút */
         }
+
         .btn-primary:hover {
             background-color: #5568c2;
         }
+
         .btn-secondary {
             border-radius: 10px;
             background-color: #764ba2;
@@ -72,26 +83,37 @@
             font-size: 16px;
             font-weight: 500;
             color: white;
+            width: 100%; /* Đảm bảo nút chiếm toàn bộ chiều rộng */
+            margin-top: 10px; /* Khoảng cách phía trên nút */
         }
+
         .btn-secondary:hover {
             background-color: #5a3a7a;
         }
+
         h3 {
             font-weight: 700;
             color: #333;
             margin-bottom: 20px;
+            text-align: center; /* Căn giữa tiêu đề */
         }
+
         .alert {
             border-radius: 10px;
+            margin-bottom: 15px; /* Khoảng cách phía dưới thông báo lỗi */
         }
+
         hr {
             border-top: 1px solid #ddd;
+            margin: 20px 0; /* Khoảng cách trên và dưới đường kẻ */
         }
+
         a {
             text-decoration: none;
             color: #667eea;
             font-weight: 500;
         }
+
         a:hover {
             color: #5568c2;
         }
@@ -121,9 +143,9 @@
         <hr/>
         <a href="/dangky" class="btn btn-secondary w-100">Đăng ký</a>
     </div>
-    <div class="login-image">
-        <img src="https://20sfvn.com/wp-content/uploads/2022/09/thiet-ke-nha-hang-han.jpeg" alt="Login Image">
-    </div>
+<!--    <div class="login-image">-->
+<!--        <img src="https://20sfvn.com/wp-content/uploads/2022/09/thiet-ke-nha-hang-han.jpeg" alt="Login Image">-->
+<!--    </div>-->
 </div>
 </body>
 </html>

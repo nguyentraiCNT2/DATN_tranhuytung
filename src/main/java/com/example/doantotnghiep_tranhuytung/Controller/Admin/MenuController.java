@@ -1,4 +1,4 @@
-package com.example.doantotnghiep_tranhuytung.Controller;
+package com.example.doantotnghiep_tranhuytung.Controller.Admin;
 
 import com.example.doantotnghiep_tranhuytung.Entity.CategoryEntity;
 import com.example.doantotnghiep_tranhuytung.Entity.MenuEntity;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * Bao gồm các chức năng: xem danh sách, thêm, sửa, xóa món ăn.
  */
 @Controller
-@RequestMapping("/thuc-don")
+@RequestMapping("/admin/thuc-don")
 public class MenuController {
     private final MenuRepository MenuRepository;
     private final CategoryRepository categoryRepository;
@@ -124,10 +124,10 @@ public class MenuController {
 
             // Lưu món ăn vào database
             MenuEntity savedMenu = MenuRepository.save(menu);
-            savedMenu.setImageUrl("/thuc-don/image/" + savedMenu.getId());
+            savedMenu.setImageUrl("/image/menu/" + savedMenu.getId());
             MenuRepository.save(savedMenu);
 
-            return "redirect:/thuc-don/list";
+            return "redirect:/admin/thuc-don/list";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "Admin/Menu/add";
@@ -156,7 +156,7 @@ public class MenuController {
             // Nếu có ảnh mới tải lên thì cập nhật, nếu không thì giữ ảnh cũ
             if (imageFile != null && !imageFile.isEmpty()) {
                 menu.setImage(imageFile.getBytes());
-                menu.setImageUrl("/thuc-don/image/" + id);
+                menu.setImageUrl("/image/menu/" + id);
             } else {
                 MenuEntity existingMenu = MenuRepository.findById(id).orElseThrow();
                 menu.setImage(existingMenu.getImage());
@@ -168,7 +168,7 @@ public class MenuController {
             menu.setUpdatedAt(Timestamp.from(Instant.now()));
 
             MenuRepository.save(menu);
-            return "redirect:/thuc-don/list";
+            return "redirect:/admin/thuc-don/list";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "Admin/Menu/edit";
@@ -184,7 +184,7 @@ public class MenuController {
             MenuEntity menuEntity = MenuRepository.findById(id).orElseThrow();
             menuEntity.setDeleteAt(Timestamp.from(Instant.now()));
             MenuRepository.save(menuEntity);
-            return "redirect:/thuc-don/list";
+            return "redirect:/admin/thuc-don/list";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
             return "Admin/Menu/list";

@@ -90,4 +90,11 @@ public class UserController {
             return "dangky"; // Quay lại trang đăng ký nếu có lỗi
         }
     }
+
+    // Xử lý logout
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/dangnhap";
+    }
 }

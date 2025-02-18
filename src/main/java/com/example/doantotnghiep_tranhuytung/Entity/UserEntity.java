@@ -46,6 +46,9 @@ public class UserEntity {
 
     @Column(columnDefinition = "LONGBLOB")
     private byte[] avatar; // Ảnh đại diện của người dùng lưu dưới dạng byte[]
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
+
 
     /**
      * Getter và Setter cho các thuộc tính của UserEntity.
@@ -122,5 +125,13 @@ public class UserEntity {
 
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

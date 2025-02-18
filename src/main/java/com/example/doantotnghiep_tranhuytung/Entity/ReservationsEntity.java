@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Entity đại diện cho bảng Reservations trong cơ sở dữ liệu.
@@ -30,7 +31,7 @@ public class ReservationsEntity {
     private UserEntity userId;
 
     @Column(nullable = false)
-    private Timestamp reservationDate; // Ngày đặt chỗ
+    private LocalDateTime reservationDate; // Ngày đặt chỗ
 
     @Column(nullable = false)
     private int reservationNumber; // Số lượng chỗ đặt
@@ -63,11 +64,11 @@ public class ReservationsEntity {
         this.userId = userId;
     }
 
-    public Timestamp getReservationDate() {
+    public LocalDateTime getReservationDate() {
         return reservationDate;
     }
 
-    public void setReservationDate(Timestamp reservationDate) {
+    public void setReservationDate(LocalDateTime reservationDate) {
         this.reservationDate = reservationDate;
     }
 
