@@ -1,8 +1,10 @@
 package com.example.doantotnghiep_tranhuytung.Controller;
 
 import com.example.doantotnghiep_tranhuytung.Entity.MenuEntity;
+import com.example.doantotnghiep_tranhuytung.Entity.ReviewsEntity;
 import com.example.doantotnghiep_tranhuytung.Repository.CategoryRepository;
 import com.example.doantotnghiep_tranhuytung.Repository.MenuRepository;
+import com.example.doantotnghiep_tranhuytung.Repository.ReviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Đây là một controller xử lý các yêu cầu điều hướng của ứng dụng.
@@ -24,15 +27,16 @@ import java.util.Date;
 public class HomeController {
     private final MenuRepository menuRepository;
     private final CategoryRepository categoryRepository;
-
+    private final ReviewRepository reviewRepository;
     /**
      * Constructor để khởi tạo controller với một repository để thao tác với dữ liệu thực đơn (menu).
      *
      * @param menuRepository Đối tượng giúp truy vấn dữ liệu thực đơn từ cơ sở dữ liệu.
      */
-    public HomeController(MenuRepository menuRepository, CategoryRepository categoryRepository) {
+    public HomeController(MenuRepository menuRepository, CategoryRepository categoryRepository, ReviewRepository reviewRepository) {
         this.menuRepository = menuRepository;
         this.categoryRepository = categoryRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     /**
@@ -99,7 +103,9 @@ public class HomeController {
     @GetMapping("/thuc-don/{id}")
     public String thucDon(@PathVariable Long id, Model model) {
         MenuEntity menuEntity = menuRepository.findById(id).get();
+        List<ReviewsEntity> reviewsEntities = reviewRepository.findByMenuId(id);
         model.addAttribute("menu", menuEntity);
+        model.addAttribute("reviewsEntities", reviewsEntities);
         return "ChiTiet-thucdon";
     }
 }
