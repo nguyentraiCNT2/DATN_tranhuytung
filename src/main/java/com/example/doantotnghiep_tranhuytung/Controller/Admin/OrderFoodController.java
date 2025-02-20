@@ -52,6 +52,7 @@ public class OrderFoodController {
 
             model.addAttribute("orderFoodEntities", orderFoodEntities);
             model.addAttribute("totalPrice", totalPrice); // Thêm tổng tiền vào model
+            model.addAttribute("userId", id);
             return "Admin/OrderFood/orderFood";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

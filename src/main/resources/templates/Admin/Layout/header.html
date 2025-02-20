@@ -1,22 +1,151 @@
-<style>
-  header {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    background-color: #BE1E2D;
-    padding: 10px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-  }
-</style>
-
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel Header</title>
+  <style>
+    header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      background-color: #BE1E2D;
+      padding: 10px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+    }
+    nav {
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+    nav a {
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      color: white;
+    }
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .avatar {
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    /* Dropdown style */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-menu {
+      background-color: #8B0000;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: none; /* Ẩn mặc định */
+      position: absolute;
+      right: 0;
+      top: 40px;
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 150px;
+    }
+    .dropdown-menu li {
+      border-bottom: 1px solid #fff;
+    }
+    .dropdown-menu li:last-child {
+      border-bottom: none;
+    }
+    .dropdown-item {
+      display: block;
+      padding: 10px 15px;
+      color: white;
+      text-decoration: none;
+    }
+    .dropdown-item:hover {
+      background-color: #FFD700;
+      color: #8B0000;
+    }
+    .username {
+      color: white;
+    }
+    /* Style cho nút Đăng Nhập, Đăng Ký nếu chưa đăng nhập */
+    .btn-action-header {
+      padding: 6px 12px;
+      border: 1px solid white;
+      background-color: transparent;
+      color: white;
+      text-decoration: none;
+      margin-right: 10px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+    .btn-action-header:hover {
+      background-color: white;
+      color: #BE1E2D;
+    }
+  </style>
+</head>
+<body>
 <header>
   <div class="logo">Admin Panel</div>
-  <div class="user-info">
-    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg" width="40" height="40" class="rounded-circle">
-    <span>Quản trị viên</span>
+  <!-- Nếu đã đăng nhập (Thymeleaf điều kiện hiển thị) -->
+  <div class="dropdown" th:if="${session.userEmail != null}">
+    <a href="#" class="nav-link dropdown-toggle" id="dropdownToggle">
+      <img src="https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg" alt="Avatar" class="avatar">
+      <span class="username" th:text="${session.userEmail}">Tài Khoản</span>
+    </a>
+    <ul  class="dropdown-menu" id="dropdownMenu">
+      <li><a class="dropdown-item" href="/user/profile">Trang Cá Nhân</a></li>
+      <li><a class="dropdown-item" href="/logout">Đăng Xuất</a></li>
+      <li><a class="dropdown-item" href="/home">Trang Người dùng</a></li>
+    </ul>
+  </div>
+  <!-- Nếu chưa đăng nhập -->
+  <div th:if="${session.userEmail == null}">
+    <a href="/dangnhap" class="btn-action-header">Đăng Nhập</a>
+    <a href="/dangky" class="btn-action-header">Đăng Ký</a>
   </div>
 </header>
+
+<!-- JavaScript để xử lý dropdown (không dùng Bootstrap) -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dropdownToggle = document.getElementById('dropdownToggle');
+    var dropdownMenu = document.getElementById('dropdownMenu');
+
+    if (dropdownToggle) {
+      dropdownToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Toggle hiển thị dropdown
+        dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';
+      });
+    }
+
+    // Ẩn dropdown khi click bên ngoài
+    document.addEventListener('click', function(e) {
+      if (dropdownMenu && !dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownMenu.style.display = 'none';
+      }
+    });
+  });
+</script>
+</body>
+</html>

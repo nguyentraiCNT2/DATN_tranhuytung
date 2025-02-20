@@ -5,6 +5,9 @@ import com.example.doantotnghiep_tranhuytung.Entity.UserEntity;
 import com.example.doantotnghiep_tranhuytung.Repository.ReservationRepository;
 import com.example.doantotnghiep_tranhuytung.Repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,20 @@ public class UserReservationController {
         this.reservationRepository = reservationRepository;
         this.httpSession = httpSession;
         this.userRepository = userRepository;
+    }
+    @GetMapping("/me")
+    public String getMyAppointments(Model model,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size) {
+        String userName = (String) httpSession.getAttribute("userEmail");
+        UserEntity userEntity = userRepository.findByEmail(userName).get();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReservationsEntity> reservationsEntities = reservationRepository.findByCustomerId(userEntity.getId(),pageable);
+        model.addAttribute("reservationsEntities", reservationsEntities.getContent());
+        model.addAttribute("totalPages", reservationsEntities.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
+        return "Profile/UserAppointmentsList";
     }
 
     @GetMapping("/create")
@@ -60,7 +77,7 @@ public class UserReservationController {
      * Xử lý cập nhật thông tin món ăn.
      */
     @GetMapping("/edit/{id}")
-    public String editMenu(@PathVariable Long id, @ModelAttribute ReservationsEntity reservationsEntity, Model model) {
+    public String editMenu(@PathVariable Long id, Model model) {
         try {
             ReservationsEntity reservations = reservationRepository.findById(id).get();
             reservations.setStatus("Hủy");
@@ -68,7 +85,7 @@ public class UserReservationController {
             return "redirect:/admin/thuc-don/list";
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
-            return "Admin/Menu/edit";
+            return "Profile/UserAppointmentsList";
         }
     }
 }

@@ -48,6 +48,7 @@ public class UserEntity {
     private byte[] avatar; // Ảnh đại diện của người dùng lưu dưới dạng byte[]
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
+    private boolean enabled;
 
 
     /**
@@ -133,5 +134,13 @@ public class UserEntity {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

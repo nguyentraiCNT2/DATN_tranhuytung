@@ -103,13 +103,36 @@
       padding: 4px 10px;
       border-radius: 5px;
       transition: all 0.3s;
-      margin-left: 25%;
+      margin-left: 20%;
     }
 
     .buy-menu-button:hover {
       background: #BE1E2D;
       color: #ffffff;
     }
+    .detail-button {
+      display: flex;
+      justify-content: center; /* Căn giữa nội dung theo chiều ngang */
+      align-items: center; /* Căn giữa nội dung theo chiều dọc */
+      text-align: center; /* Căn chữ giữa (phòng trường hợp nội dung bị lệch) */
+      gap: 1rem;
+      text-decoration: none;
+      color: #BE1E2D;
+      background-color: #fff;
+      border: 1px solid #BE1E2D;
+      padding: 10px 20px; /* Tăng padding để nút đẹp hơn */
+      border-radius: 5px;
+      transition: all 0.3s;
+      margin-top: 20px;
+      width: max-content; /* Đảm bảo chiều rộng nút vừa với nội dung */
+      margin-left: 20%;
+    }
+
+    .detail-button:hover {
+      background: #BE1E2D;
+      color: #ffffff;
+    }
+
     .menu-item {
       background: white;
       padding: 15px;
@@ -178,6 +201,9 @@
               <button type="submit" class="buy-menu-button">
                 <i class="fa-solid fa-cart-shopping"></i> Đặt món
               </button>
+              <a  class="detail-button" th:href="@{/thuc-don/{id}(id=${menu.id})}">
+                xem chi tiết
+              </a>
             </form>
 
           </div>

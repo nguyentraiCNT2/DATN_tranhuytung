@@ -1,11 +1,15 @@
 package com.example.doantotnghiep_tranhuytung.Controller;
 
 import com.example.doantotnghiep_tranhuytung.Entity.UserEntity;
+import com.example.doantotnghiep_tranhuytung.Repository.UserRepository;
+import com.example.doantotnghiep_tranhuytung.Request.ChangePasswordRequest;
+import com.example.doantotnghiep_tranhuytung.Request.ResetPasswordRequest;
 import com.example.doantotnghiep_tranhuytung.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controller chịu trách nhiệm xử lý các chức năng liên quan đến người dùng
@@ -15,13 +19,15 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService; // Dịch vụ xử lý logic liên quan đến User
     private final HttpSession httpSession; // Đối tượng lưu trữ thông tin đăng nhập của người dùng
+    private final UserRepository userRepository;
 
     /**
      * Constructor để khởi tạo UserController với các dependencies cần thiết.
      */
-    public UserController(UserService userService, HttpSession httpSession) {
+    public UserController(UserService userService, HttpSession httpSession, UserRepository userRepository) {
         this.userService = userService;
         this.httpSession = httpSession;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -96,5 +102,133 @@ public class UserController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/dangnhap";
+    }
+
+    @GetMapping("/user/profile")
+    public String profile(Model model) {
+        try {
+            String username = (String) httpSession.getAttribute("userEmail");
+            UserEntity user = userRepository.findByEmail(username).get();
+            model.addAttribute("user", user);
+            return "Profile/detail";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @PostMapping("/user/change-image")
+    public String profile(@RequestParam("imageFile") MultipartFile imageFile,  Model model) {
+        try {
+            String username = (String) httpSession.getAttribute("userEmail");
+            UserEntity user = userRepository.findByEmail(username).get();
+            user.setAvatar(imageFile.getBytes());
+            userRepository.save(user);
+            model.addAttribute("user", user);
+            return "redirect:/user/profile";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/user/profile/update")
+    public String updateProfile(Model model) {
+        String username = (String) httpSession.getAttribute("userEmail");
+        UserEntity user = userRepository.findByEmail(username).get();
+        model.addAttribute("user", user);
+        return "Profile/update_prodile";
+    }
+    @PostMapping("/user/profile/update")
+    public String updateProfile(@ModelAttribute UserEntity userEntity, Model model) {
+        try {
+            String username = (String) httpSession.getAttribute("userEmail");
+            UserEntity user = userRepository.findByEmail(username).get();
+            user.setFullName(userEntity.getFullName());
+            user.setPhone(userEntity.getPhone());
+            userRepository.save(user);
+            return "redirect:/user/profile";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @GetMapping("/user/change-password")
+    public String changePassword(Model model) {
+        return "Profile/profile_changePassword";
+    }
+    @PostMapping("/user/change-password")
+    public String changePassword(@ModelAttribute ChangePasswordRequest changePasswordRequest, Model model) {
+        try {
+            String username = (String) httpSession.getAttribute("userEmail");
+            UserEntity user = userRepository.findByEmail(username).get();
+            if (user.getPassword().equals(changePasswordRequest.getOldPassword())){
+                model.addAttribute("error", "Mật khẩu hiện tại không chính xác");
+                return "Profile/profile_changePassword";
+
+            }
+            if (changePasswordRequest.getNewPassword().equals(changePasswordRequest.getOldPassword())){
+                model.addAttribute("error", "Mật khẩu mới không thế trùng với mật khẩu hiện tại");
+                return "Profile/profile_changePassword";
+
+            }
+            if (changePasswordRequest.getNewPassword().equals(changePasswordRequest.getConfirmPassword())){
+                model.addAttribute("error", "Mật khẩu không trùng khớp");
+                return "Profile/profile_changePassword";
+
+            }
+            if (changePasswordRequest.getNewPassword().length() < 8){
+                model.addAttribute("error", "Mật khẩu tối thiểu 8 ký tự");
+                return "Profile/profile_changePassword";
+
+            }
+            if (changePasswordRequest.getNewPassword().contains(" ") ){
+                model.addAttribute("error", "Mật khẩu không thể chứa khoản trắng");
+                return "Profile/profile_changePassword";
+            }
+            user.setPassword(changePasswordRequest.getNewPassword());
+            userRepository.save(user);
+            return "redirect:/user/profile";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+    }
+    @GetMapping("/for-get-password")
+    public String forgetPassword(){
+        return "ForgetPassword";
+    }
+    @PostMapping("/for-get-password")
+    public String forgetPassword(@RequestParam("email") String email, Model model) {
+        try {
+            UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
+            httpSession.setAttribute("forgetPasswordEmail", userEntity.getEmail());
+            return "redirect:/re-set-password";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "ForgetPassword";
+        }
+    }
+    @GetMapping("/re-set-password")
+    public String reSetPassword(){
+        return "ResetPassword";
+    }
+    @PostMapping("/re-set-password")
+    public String reSetPassword(@ModelAttribute ResetPasswordRequest resetPasswordRequest, Model model) {
+        try {
+            if (!resetPasswordRequest.getNewPassword().equals( resetPasswordRequest.getConfirmPassword())) {
+                throw new RuntimeException("Mật khẩu không trùng khớp");
+            }
+            // Kiểm tra mật khẩu có hợp lệ không
+            if (resetPasswordRequest.getNewPassword().length() < 8) {
+                throw new RuntimeException("Mật khẩu cần tối thiểu 8 ký tự");
+            }
+            if (resetPasswordRequest.getNewPassword().contains(" ")) {
+                throw new RuntimeException("Mật khẩu không thể chứa khoảng trắng");
+            }
+            UserEntity userEntity = userRepository.findByEmail(resetPasswordRequest.getEmail()).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
+            userEntity.setPassword(resetPasswordRequest.getNewPassword());
+            userRepository.save(userEntity);
+            return "redirect:/dangnhap";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "ResetPassword";
+        }
     }
 }

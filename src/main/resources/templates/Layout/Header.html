@@ -1,97 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Header với Dropdown</title>
+  <style>
+    /* Header */
+    header {
+      font-family: 'Noto Sans KR', sans-serif;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      background-color: #BE1E2D;
+      padding: 10px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+    }
+    nav {
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+    nav a {
+      color: #ffffff;
+      font-size: 16px !important;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .avatar {
+      height: 30px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    /* Dropdown style */
+    .dropdown-menu {
+      background-color: #8B0000;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: none; /* Ẩn mặc định */
+      position: absolute;
+      right: 40px; /* Điều chỉnh theo vị trí mong muốn */
+      top: 30px;   /* Điều chỉnh để hiển thị dưới header */
+      border-radius: 5px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 150px;
+    }
+    .dropdown-menu li {
+      border-bottom: 1px solid #fff;
+    }
+    .dropdown-menu li:last-child {
+      border-bottom: none;
+    }
+    .dropdown-item {
+      display: block;
+      padding: 10px 15px;
+      color: white;
+      text-decoration: none;
+    }
+    .dropdown-item:hover {
+      background-color: #FFD700;
+      color: #8B0000;
+    }
+    .username {
+      color: white;
+    }
+    .btn-outline-light{
+      background: none;
+      border: 1px solid #f2f2f2;
+      color: #f2f2f2;
+      padding: 10px 15px;
+      border-radius: 30px;
+text-decoration: none;
+      font-weight: bold;
+    }
+    .btn-outline-light:hover{
+      background: #8B0000;
 
-<style>
-  /* Header */
-
-  header {
-    font-family: 'Noto Sans KR', sans-serif;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    background-color: #BE1E2D;
-    padding: 10px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  .logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-  }
-  .user-info {
-    display: flex;
-    align-items: center;
-    color: white;
-  }
-  .user-info img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  nav {
-
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-
-  }
-
-  nav a {
-    color: #ffffff;
-    font-size: 16px !important;
-    font-weight: bold;
-    text-decoration: none;
-  }
-  .avatar {
-    height: 30px;
-    border-radius: 50%;
-    margin-right: 5px;
-  }
-
-  .dropdown-menu {
-    background-color: #8B0000;
-  }
-
-  .dropdown-item {
-    color: white;
-  }
-
-  .dropdown-item:hover {
-    background-color: #FFD700;
-    color: #8B0000;
-  }
-  .username{
-    color: white;
-  }
-</style>
+    }
+    .btn-warning{
+      background: #FFD700 ;
+      color: #000;
+      border: 1px solid #f2f2f2;
+      padding: 10px 15px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .btn-warning:hover{
+      background: #bea200;
+    }
+  </style>
+</head>
+<body>
 <header>
   <div class="logo">Nhà Hàng Hàn Quốc</div>
   <nav>
     <a href="/home">Trang Chủ</a>
     <a href="/thuc-don">Thực Đơn</a>
     <a href="/user/dat-ban/create">Đặt Bàn</a>
+    <a href="/user/dat-mon/me">Đặt món</a>
     <a href="#">Liên Hệ</a>
   </nav>
 
+  <!-- Dropdown khi đã đăng nhập -->
   <div th:if="${session.userEmail != null}" class="dropdown">
-    <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
+    <a href="#" class="nav-link dropdown-toggle" id="dropdownMenuButton">
       <img src="https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg" alt="Avatar" class="avatar">
-      <span class="username"  th:text="${session.userEmail}">Tài Khoản</span>
+      <span class="username" th:text="${session.userEmail}">Tài Khoản</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <li><a class="dropdown-item" href="">Trang Cá Nhân</a></li>
+      <li><a class="dropdown-item" href="/user/profile">Trang Cá Nhân</a></li>
       <li><a class="dropdown-item" href="/logout">Đăng Xuất</a></li>
-      <li><a class="dropdown-item" href="#">Trang Quản Lý</a></li>
+      <li>
+        <a th:if="${session.userRole == 'ADMIN' or session.userRole == 'SUPER_ADMIN'}" class="dropdown-item" href="/admin">Trang Quản Lý</a>
+      </li>
     </ul>
   </div>
 
-  <div th:if="${session.userEmail == null}">
-    <a href="/dangnhap" class="btn btn-outline-light me-2">Đăng Nhập</a>
-    <a href="/dangky" class="btn btn-warning">Đăng Ký</a>
+  <!-- Hiển thị nếu chưa đăng nhập -->
+  <div th:if="${session.userEmail == null}" class="no-login">
+    <a href="/dangnhap" class="btn-outline-light me-2">Đăng Nhập</a>
+      <a href="/dangky" class="btn-warning">Đăng Ký</a>
   </div>
 </header>
 
+<!-- JavaScript xử lý dropdown -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var dropdownToggle = document.getElementById('dropdownMenuButton');
+    var dropdownMenu = document.querySelector('.dropdown-menu');
+
+    // Khi nhấn vào dropdownToggle
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
+      // Toggle hiển thị dropdown
+      if (dropdownMenu.style.display === 'block') {
+        dropdownMenu.style.display = 'none';
+      } else {
+        dropdownMenu.style.display = 'block';
+      }
+    });
+
+    // Ẩn dropdown khi click bên ngoài
+    document.addEventListener('click', function(e) {
+      if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownMenu.style.display = 'none';
+      }
+    });
+  });
+</script>
+</body>
+</html>

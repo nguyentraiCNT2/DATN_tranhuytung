@@ -9,10 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Optional;
 @Controller
 @RequestMapping("/image")
@@ -44,17 +48,25 @@ public class ImageController {
     }
     @GetMapping("/user/{id}")
     public ResponseEntity<byte[]> getImageUser(@PathVariable Long id) {
-        Optional<UserEntity> user = userRepository.findById(id);
+        Optional<UserEntity> userEntity = userRepository.findById(id);
+        byte[] imageBytes;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG); // Điều chỉnh theo loại ảnh mặc định
 
-        // Nếu món ăn có ảnh, trả về ảnh đó dưới dạng dữ liệu nhị phân
-        if (user.isPresent() && user.get().getAvatar() != null) {
-            byte[] imageBytes = user.get().getAvatar();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_PNG);
-            return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+        if (userEntity.isPresent() && userEntity.get().getAvatar() != null) {
+            imageBytes = userEntity.get().getAvatar();
+        } else {
+            try {
+                // Thay đổi URL dưới đây thành link ảnh mặc định bạn mong muốn
+                URL url = new URL("https://i.pinimg.com/736x/8f/1c/a2/8f1ca2029e2efceebd22fa05cca423d7.jpg");
+                try (InputStream is = url.openStream()) {
+                    imageBytes = StreamUtils.copyToByteArray(is);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
-
-        // Nếu không tìm thấy ảnh, trả về lỗi 404
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 }

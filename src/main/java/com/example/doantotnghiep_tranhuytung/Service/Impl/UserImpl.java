@@ -39,7 +39,9 @@ public class UserImpl implements UserService {
             if (!user.getPassword().equals(password)) {
                 throw new RuntimeException("Mật khẩu không chính xác");
             }
-
+            if (!user.isEnabled()){
+                throw new RuntimeException("Tài khoản này đã bị khóa");
+            }
             return user;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -71,6 +73,7 @@ public class UserImpl implements UserService {
 
             // Thiết lập vai trò mặc định cho người dùng
             userEntity.setRole("USER");
+            userEntity.setEnabled(true);
 
             // Thiết lập thời gian tạo tài khoản
             userEntity.setCreatedAt(Timestamp.from(Instant.now()));
