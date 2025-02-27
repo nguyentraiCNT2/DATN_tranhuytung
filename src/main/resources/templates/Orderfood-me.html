@@ -7,103 +7,93 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #c0392b; /* Màu đỏ chủ đạo */
+      --light-color: #fff;
+      --dark-color: #333;
+    }
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #f8f8f8;
+      background-color: #fdfdfd;
       color: #333;
-      padding-top: 60px;
+      padding-top: 80px; /* Để dành chỗ cho header nếu header cố định */
     }
-    .content {
-      margin-left: 260px;
-      padding: 20px;
+    h2 {
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 20px;
     }
-    .table-responsive {
-      display: flex;
-      padding: 10px;
-      justify-content: center;
-      gap: 1rem;
+    /* Table styling */
+    .table thead th {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+    }
+    .table tbody tr:hover {
+      background-color: #f2f2f2;
+    }
+    /* Input datetime dạng read-only */
+    .input-datetime {
+      border: none;
+      background: transparent;
+      pointer-events: none;
     }
     .btn {
       height: 40px;
     }
-    .pagination {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .table-control {
-      border: none;
-    }
-    .table-control:focus {
-      outline: none;
-    }
   </style>
 </head>
 <body>
+<!-- Nhúng Header (Sử dụng Thymeleaf, nếu có) -->
 <th:block th:replace="Layout/Header"></th:block>
-
 
 <div class="container mt-5">
   <h2>Quản lý Đặt Món</h2>
 
   <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-  <!--  <form method="get" action="/admin/dan-mon">-->
-  <!--    <div class="table-responsive">-->
-  <!--      <div class="mb-3">-->
-  <!--        <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên" th:value="${param.name}" />-->
-  <!--      </div>-->
-  <!--      <div class="mb-3">-->
-  <!--        <input type="date" name="startDate" class="form-control" placeholder="Ngày bắt đầu" th:value="${paramStartDate}" />-->
-  <!--      </div>-->
-  <!--      <div class="mb-3">-->
-  <!--        <input type="date" name="endDate" class="form-control" placeholder="Ngày kết thúc" th:value="${paramEndDate}" />-->
-  <!--      </div>-->
-  <!--      <button type="submit" class="btn btn-danger"><i class="fa-solid fa-filter"></i> Lọc</button>-->
-  <!--    </div>-->
-  <!--  </form>-->
-
-  <table class="table table-bordered mt-3">
-    <thead>
-    <tr>
-      <th>ID</th>
-<!--      <th>Tên khách hàng</th>-->
-<!--      <th>Số điện thoại</th>-->
-      <th>ảnh</th>
-      <th>Món ăn</th>
-      <th>Thời gian đặt</th>
-      <th>Số lượng món</th>
-      <th>Trạng thái</th>
-      <th>Hành động</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order : ${orderFoodEntities}">
-      <td th:text="${order.id}"></td>
-      <td >
-        <img th:if="${order.menu != null}" th:src="${order.menu.imageUrl}" width="100"/>
-        <span th:unless="${order.menu != null}">Không có ảnh</span>
-      </td>
-      <td th:text="${order.menu != null} ? ${order.menu.name} : 'Không có món'"></td>
-      <td>
-        <input type="datetime-local" class="table-control" th:value="${order.createAt !=  null ? order.createAt : ''}" id="createAt"  readonly>
-      </td>
-      <td th:text="${order.quantity}">
-
-      </td>
-      <td th:text="${order.status}"></td>
-      <td>
-        <a th:href="@{/user/dat-mon/delete/{id}(id=${order.id})}" class="btn btn-warning btn-sm">Xóa</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-
-
+  <!-- Bảng hiển thị danh sách đơn đặt món -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover mt-3">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Ảnh</th>
+        <th>Món ăn</th>
+        <th>Thời gian đặt</th>
+        <th>Số lượng món</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${orderFoodEntities}">
+        <td th:text="${order.id}"></td>
+        <td>
+          <img th:if="${order.menu != null}" th:src="${order.menu.imageUrl}" width="100" alt="Ảnh món ăn"/>
+          <span th:unless="${order.menu != null}">Không có ảnh</span>
+        </td>
+        <td th:text="${order.menu != null} ? ${order.menu.name} : 'Không có món'"></td>
+        <td>
+          <input type="datetime-local" class="form-control input-datetime"
+                 th:value="${order.createAt != null ? order.createAt : ''}" style="background: none; border: none" readonly>
+        </td>
+        <td th:text="${order.quantity}"></td>
+        <td th:text="${order.status}"></td>
+        <td>
+          <a th:href="@{/user/dat-mon/delete/{id}(id=${order.id})}" class="btn btn-warning btn-sm">
+            <i class="fa-solid fa-trash"></i> Xóa
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
+
+<!-- Nhúng Footer (Sử dụng Thymeleaf, nếu có) -->
 <th:block th:replace="Layout/Footer"></th:block>
-<!-- Script của Bootstrap (tùy chọn) -->
+
+<!-- Bootstrap JS Bundle (bao gồm Popper) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

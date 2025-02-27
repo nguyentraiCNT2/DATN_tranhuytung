@@ -108,4 +108,9 @@ public class HomeController {
         model.addAttribute("reviewsEntities", reviewsEntities);
         return "ChiTiet-thucdon";
     }
+
+    @GetMapping("/contact")
+    public String contactPage() {
+        return "contact"; // Trả về trang contact.html
+    }
 }

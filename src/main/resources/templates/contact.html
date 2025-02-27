@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Liên Hệ - Nhà Hàng Ẩm Thực Hàn Quốc</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #c0392b;
+      --light-color: #fff;
+      --dark-color: #333;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #fdfdfd;
+      color: var(--dark-color);
+      margin: 0;
+      padding: 0;
+    }
+    /* Navbar */
+    .navbar {
+      background-color: var(--primary-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .navbar-brand, .nav-link {
+      color: var(--light-color) !important;
+      font-weight: bold;
+    }
+    .nav-link:hover {
+      color: #f8f9fa !important;
+    }
+    /* Contact Section */
+    .contact-section {
+      padding: 50px 20px;
+    }
+    .contact-title {
+      text-align: center;
+      margin-bottom: 40px;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    .contact-info {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 40px;
+    }
+    .contact-info h3 {
+      color: var(--primary-color);
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .contact-info p {
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+    .contact-info i {
+      color: var(--primary-color);
+      margin-right: 10px;
+    }
+    /* Map */
+    .map-container {
+      width: 100%;
+      height: 400px;
+      border: 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    /* Footer */
+    footer {
+      background-color: var(--primary-color);
+      padding: 20px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--light-color);
+    }
+  </style>
+</head>
+<body>
+<!-- Header -->
+<!-- Include Header (được gọi qua Thymeleaf) -->
+<th:block th:replace="Layout/Header"></th:block>
+
+<!-- Contact Section -->
+<section class="contact-section container">
+  <h2 class="contact-title">Liên Hệ Với Chúng Tôi</h2>
+  <div class="row">
+    <!-- Thông tin liên hệ -->
+    <div class="col-md-6">
+      <div class="contact-info">
+        <h3>Thông Tin Liên Hệ</h3>
+        <p><i class="fas fa-map-marker-alt"></i> Địa chỉ: 28a Đ. Lê Trọng Tân, Dương Kinh, Hà Đông, Hà Nội, Việt Nam</p>
+        <p><i class="fas fa-phone"></i> Điện thoại: +84 123 456 789</p>
+        <p><i class="fas fa-envelope"></i> Email: info@nhahanghanquoc.com</p>
+        <p><i class="fas fa-clock"></i> Giờ mở cửa: 10:00 - 22:00 hàng ngày</p>
+      </div>
+    </div>
+    <!-- Bản đồ -->
+    <div class="col-md-6">
+      <iframe class="map-container"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.2410087344894!2d105.7615406!3d20.9630962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31345328b5104127%3A0xee61651cf4f623b3!2s28a%20%C4%90.%20L%C3%AA%20Tr%E1%BB%8Bng%20T%C3%A2n%2C%20D%C6%B0%C6%A1ng%20Kinh%2C%20H%C3%A0%20%C4%90%C3%B4ng%2C%20H%C3%A0%20N%E1%BB%99i%2C%20Vi%E1%BB%87t%20Nam!5e0!3m2!1svi!2s!4v1677573154410"
+              allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+
+<!-- Include Footer -->
+<th:block th:replace="Layout/Footer"></th:block>
+<!-- Bootstrap JS Bundle (bao gồm Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

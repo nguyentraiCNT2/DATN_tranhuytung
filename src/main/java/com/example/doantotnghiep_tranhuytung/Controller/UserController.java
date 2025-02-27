@@ -55,6 +55,8 @@ public class UserController {
             // Lưu thông tin người dùng vào session để sử dụng trong các phiên sau
             httpSession.setAttribute("userRole", user.getRole()); // Lưu quyền của user vào session
             httpSession.setAttribute("userEmail", user.getEmail()); // Lưu email vào session
+            httpSession.setAttribute("userName", user.getFullName());
+            httpSession.setAttribute("userId", user.getId());
             model.addAttribute("user", user);
 
             // Chuyển hướng về trang chủ sau khi đăng nhập thành công
